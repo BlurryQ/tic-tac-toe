@@ -2,10 +2,10 @@ console.log("JS running")
 
 function Game () {
     const gameboard = [[0,0,0],[0,0,0],[0,0,0]]
-    function makeChoice () {
+    function makeChoice (marker) {
         const choice = prompt("Choose your position")
         console.log(choice)
-        markPosition(choice)
+        markPosition(marker, choice)
     }
     function makePlayer (name, score, marker) {
         player = {};
@@ -14,13 +14,13 @@ function Game () {
         player.marker = marker
         return player
     }
-    function markPosition (choice) {
+    function markPosition (marker, choice) {
         const coordinates = choice.toString()
         console.log(coordinates)
         const x = coordinates[1]
         const y = coordinates[0]
         console.log("X: " + x + " | Y: " + y)
-        gameboard[x-1][y-1] = "X"
+        gameboard[x-1][y-1] = marker
         console.log(gameboard)
     }
     function winGame () {
@@ -29,11 +29,15 @@ function Game () {
 
     const playerOne = makePlayer("Player 1", 0, "X")
     const playerTwo = makePlayer("Player 2", 0, "O")
-    console.log("playerOne")
-    console.log(playerOne)
-    console.log("playerTwo")
-    console.log(playerTwo)
-    makeChoice()
+    for(let round = 1; round <= 9; round++) {
+        if(round % 2 === 0) {
+            makeChoice(playerOne.marker)
+        } else {
+            makeChoice(playerTwo.marker)
+        }
+        
+    }
+    
 }
 
 
