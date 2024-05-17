@@ -1,7 +1,7 @@
 console.log("JS running")
 
 function Game () {
-    let gameboard = [[,,],[,,],[,,]]
+    let gameboard = [[0,0,0],[0,0,0],[0,0,0]]
     function makeChoice (marker) {
         const choice = prompt("Choose your position")
         console.log(choice)
@@ -25,24 +25,29 @@ function Game () {
     }
     function checkForWinner () {
         let weHaveWinner = false;
-        checkRow(1)
 
-/*         checkColumn(i)
-
-        checkHorizontal() */
-
-
+        //while loop?
+        for(let i = 0; i <= 2; i++) {
+            
+            weHaveWinner = checkRow(i)
+            if(weHaveWinner) { continue }
+            weHaveWinner = checkColumn(i)
+            if(weHaveWinner) { continue }
+        }
+        console.log("marker: " + weHaveWinner)
         if(weHaveWinner) {
-            winGame(player)
+            winGame(weHaveWinner)
         } else {
             return;
         }
     }
     function checkRow(index) {
+        (console.log("GI" + gameboard[index][0]))
         const rowPositionOne = gameboard[index][0],
         rowPositionTwo = gameboard[index][1],
-        rowPositionThree = gameboard[index][2]
-        if(rowPositionOne && (rowPositionOne === rowPositionTwo && rowPositionTwo === rowPositionThree)){
+        rowPositionThree = gameboard[index][2];
+        if(!rowPositionOne || !rowPositionTwo || !rowPositionThree) { return false } ;
+        if(rowPositionOne === rowPositionTwo && rowPositionTwo === rowPositionThree){
             console.log("ROW WINNER")
             return rowPositionOne
         } else {
@@ -53,7 +58,9 @@ function Game () {
         const columnPositionOne = gameboard[0][index],
         columnPositionTwo = gameboard[1][index],
         columnPositionThree = gameboard[2][index]
-        if(columnPositionOne && (columnPositionOne === columnPositionTwo && columnPositionTwo === columnPositionThree)){
+        if(!columnPositionOne || !columnPositionTwo || !columnPositionThree) { return false } ;
+        console.log("1: " + columnPositionOne + "| 2: " + columnPositionTwo + "| 3: " + columnPositionThree)
+        if(columnPositionOne === columnPositionTwo && columnPositionTwo === columnPositionThree){
             console.log("COLUMN WINNER")
             return columnPositionOne
         } else {
@@ -61,21 +68,42 @@ function Game () {
         }
     }
     function checkHorizontal() {
-
+        const topLeft = gameboard[0][0],
+        topRight = gameboard[0][2],
+        middleMiddle = gameboard[1][1],
+        bottomLeft = gameboard[2][0],
+        bottomRight = gameboard[2][2];
+        
+        console.log("(TL: " + topLeft + "| MM: " + middleMiddle + "| BR: " + bottomRight)
+        console.log("| BL: " + bottomLeft + "| MM: " + middleMiddle +  " | TR: " + topRight)
+        if((!topLeft &&  !bottomRight)||(!bottomLeft &&  !topRight)) { 
+            console.log("kick")
+            return false } ;
+        console.log(success)
+        if((topLeft === middleMiddle && middleMiddle === bottomRight )|| (topRight === middleMiddle && middleMiddle === bottomLeft)){
+            console.log("DIAGONAL WINNER")
+            return middleMiddle
+        } else {
+            return false
+        }
     }
 
-    function winGame (player) {
-        console.warn("we have a winner")
+    function winGame (marker) {
+        console.log("HERE")
+        const player = playerOne.marker ? playerOne.name : playerTwo.name
+        console.warn("---WINNER IS " + player + " ---")
+        return marker ===  playerOne.marker ? playerOne.name : playerTwo.name
     }
 
     const playerOne = makePlayer("Player 1", 0, "X")
     const playerTwo = makePlayer("Player 2", 0, "O")
-    for(let round = 1; round <= 9; round++) {
-        if(round % 2 === 1) {
+    for(let round = 1; round <= 3/* 9 */; round++) {
+/*         if(round % 2 === 1) {
             makeChoice(playerOne.marker)
         } else {
             makeChoice(playerTwo.marker)
-        }
+        } */
+        makeChoice(playerOne.marker)
         checkForWinner()
     }
     
@@ -83,6 +111,10 @@ function Game () {
 
 
 /* player choice:
+
+        00  01  02
+        10  11  12
+        20  21  22
 
         11  12  13
         21  22  23
