@@ -1,11 +1,21 @@
 console.log("JS running")
 
+const newBoard = () => {
+        const rowSpaces = Array.from( {length: 3} )
+        const columnSpaces = Array.from( {length: 3} )
+        rowSpaces.fill(columnSpaces)
+        return rowSpaces
+    }
+
+
+const gameboard = [[0,0,0],[0,0,0],[0,0,0]]
+
 function Game () {
-    let gameboard = [[0,0,0],[0,0,0],[0,0,0]]
+/* 
     const makeChoice = (marker) => {
         const choice = prompt("Choose your position")
         markPosition(marker, choice)
-    }
+    } */
     const makePlayer = (name, score, marker) => {
         player = {};
         player.name = name;
@@ -13,12 +23,15 @@ function Game () {
         player.marker = marker
         return player
     }
+    
     const markPosition = (marker, choice) => {
         const coordinates = choice.toString()
         const x = coordinates[0]
         const y = coordinates[1]
-        gameboard[x-1][y-1] = marker
-        console.log(gameboard)
+        gameboard[x][y] = marker
+        console.table(gameboard)
+        const square = document.getElementById(choice)
+        square.textContent = marker
     }
     const checkForWinner = (playerOneMarker) => {
         let weHaveWinner = false;
@@ -79,6 +92,7 @@ function Game () {
     const winGame = (marker, playerOneMarker) => {
         const player = marker === playerOneMarker ? "Player One" : "Player One"
         console.warn("---WINNER IS " + player + " ---")
+        //reset gameboard
         return player
     }
 
@@ -86,29 +100,10 @@ function Game () {
         const playerOne = makePlayer("Player 1", 0, "X")
         const playerTwo = makePlayer("Player 2", 0, "O")
 
-        let round = 1,
-        weHaveWinner = undefined;
-        while (!weHaveWinner) {
-            if(round % 2 === 1) {
-                makeChoice(playerOne.marker)
-            } else {
-                makeChoice(playerTwo.marker)
-            }
-            weHaveWinner = checkForWinner(playerOne.marker)
-            round++
-            if(round === 10) {
-                console.log("This is a tie")
-                weHaveWinner = "--- TIE ---"
-            }
-        }
     }
     
-    return { makeChoice, makePlayer, markPosition, checkForWinner, checkRow, checkColumn, checkHorizontal, winGame, play}
+    return { /* makeChoice */makePlayer, markPosition, checkForWinner, checkRow, checkColumn, checkHorizontal, winGame, play }
 }
-
-
-const newGame = Game()
-newGame.play()
 
 
 /* player choice:
@@ -122,3 +117,52 @@ newGame.play()
         31  32  33
 
  */
+
+const grid = document.getElementById("grid")
+const playGame = document.getElementById("play-game")
+
+
+const gridContent = (arr, newGame) => {
+    let round = 1
+    let rowNumb = 0
+    for(const row of arr) {
+        let columnNumb = 0
+        for(const column of arr) {
+            const div = document.createElement("div")
+            div.classList.add("square")
+            div.setAttribute("id", (rowNumb + "" + columnNumb))
+            grid.appendChild(div)
+            div.addEventListener("click", () => {
+            console.warn(div.id)
+
+            weHaveWinner = undefined;
+            console.log("round " + round)
+            if(round % 2 === 1) {
+                newGame.markPosition("X", div.id)
+                round++
+            } else {
+                newGame.markPosition("O", div.id)
+                round++
+            }
+            weHaveWinner = newGame.checkForWinner("X")
+            
+            if(round === 10) {
+                console.log("This is a tie")
+                weHaveWinner = "--- TIE ---"
+                //reset gameboard
+            }
+
+            })
+            columnNumb++
+        }
+        rowNumb++
+    }
+}
+
+playGame.addEventListener("click", () => {
+    console.log("--- NEW GAME ---")
+    const newGame = Game()
+    newGame.play()
+    gridContent(gameboard, newGame)
+})
+
