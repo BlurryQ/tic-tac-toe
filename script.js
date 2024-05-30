@@ -1,39 +1,22 @@
-console.log("JS running")
-
-const newBoard = () => {
-        const rowSpaces = Array.from( {length: 3} )
-        const columnSpaces = Array.from( {length: 3} )
-        rowSpaces.fill(columnSpaces)
-        return rowSpaces
+function board() {
+    let gameboard = [[0,0,0],[0,0,0],[0,0,0]]
+    const getBoard = () => {
+            const rowSpaces = Array.from( {length: 3} )
+            const columnSpaces = Array.from( {length: 3} )
+            rowSpaces.fill(columnSpaces)
+            return rowSpaces
+        }
+    const clearBoard = () => { //not working as intended
+        gameboard = [[0,0,0],[0,0,0],[0,0,0]]
     }
+    return { gameboard, getBoard, clearBoard }
+}
 
+function Game (gameboard) {
+    const selectSquare = (position) => {
 
-const gameboard = [[0,0,0],[0,0,0],[0,0,0]]
-
-function Game () {
-/* 
-    const makeChoice = (marker) => {
-        const choice = prompt("Choose your position")
-        markPosition(marker, choice)
-    } */
-    const makePlayer = (name, score, marker) => {
-        player = {};
-        player.name = name;
-        player.score = score;
-        player.marker = marker
-        return player
     }
-    
-    const markPosition = (marker, choice) => {
-        const coordinates = choice.toString()
-        const x = coordinates[0]
-        const y = coordinates[1]
-        gameboard[x][y] = marker
-        console.table(gameboard)
-        const square = document.getElementById(choice)
-        square.textContent = marker
-    }
-    const checkForWinner = (playerOneMarker) => {
+    const checkForWinner = () => {
         let weHaveWinner = false;
         for(let i = 0; i <= 2; i++) {
             weHaveWinner = checkRow(i)
@@ -42,12 +25,7 @@ function Game () {
             if(weHaveWinner) { break }
         }
         if(!weHaveWinner) { weHaveWinner = checkHorizontal() }
-        console.log("marker: " + weHaveWinner)
-        if(weHaveWinner) {
-            return winGame(weHaveWinner, playerOneMarker)
-        } else {
-            return;
-        }
+        return weHaveWinner
     }
     const checkRow = (index) => {
         const rowPositionOne = gameboard[index][0],
@@ -55,7 +33,6 @@ function Game () {
         rowPositionThree = gameboard[index][2];
         if(!rowPositionOne || !rowPositionTwo || !rowPositionThree) { return false } ;
         if(rowPositionOne === rowPositionTwo && rowPositionTwo === rowPositionThree){
-            console.log("ROW WINNER")
             return rowPositionOne
         } else {
             return false
@@ -67,7 +44,6 @@ function Game () {
         columnPositionThree = gameboard[2][index]
         if(!columnPositionOne || !columnPositionTwo || !columnPositionThree) { return false } ;
         if(columnPositionOne === columnPositionTwo && columnPositionTwo === columnPositionThree){
-            console.log("COLUMN WINNER")
             return columnPositionOne
         } else {
             return false
@@ -82,74 +58,73 @@ function Game () {
         
         if(!middleMiddle) { return false }
         if((topLeft === middleMiddle && middleMiddle === bottomRight ) || (topRight === middleMiddle && middleMiddle === bottomLeft)){
-            console.log("DIAGONAL WINNER")
             return middleMiddle
         } else {
             return false
         }
     }
-
-    const winGame = (marker, playerOneMarker) => {
-        const player = marker === playerOneMarker ? "Player One" : "Player One"
-        console.warn("---WINNER IS " + player + " ---")
-        //reset gameboard
-        return player
-    }
-
-    const play = () => {
-        const playerOne = makePlayer("Player 1", 0, "X")
-        const playerTwo = makePlayer("Player 2", 0, "O")
-
-    }
-    
-    return { /* makeChoice */makePlayer, markPosition, checkForWinner, checkRow, checkColumn, checkHorizontal, winGame, play }
+    return { selectSquare, checkForWinner}
 }
 
-
-/* player choice:
-
-        00  01  02
-        10  11  12
-        20  21  22
-
-        11  12  13
-        21  22  23
-        31  32  33
-
- */
-
-const grid = document.getElementById("grid")
-const playGame = document.getElementById("play-game")
-
-
-const gridContent = (arr, newGame) => {
+function newPlayer(name, marker) {
+    let score = 0;
+    const getName = () => {
+        return name
+    }
+    const getMarker = () => {
+        return marker
+    }
+    const getScore = () => {
+        return score
+    }
+    const increaseScore = () => {
+        score++
+    }
+    return { getName, getMarker, getScore, increaseScore }
+}
+//////////////////////////////////////////////////////////////////////////////
+const gridContent = (gameboard, newGame) => {
+    const grid = document.getElementById("grid")
+    const gameboardGrid = gameboard.gameboard,
+    playerOne = newPlayer("Player 1", "X"),
+    playerTwo = newPlayer("Player 2", "O")
     let round = 1
     let rowNumb = 0
-    for(const row of arr) {
+    for(const row of gameboardGrid) {
         let columnNumb = 0
-        for(const column of arr) {
+        for(const column of gameboardGrid) {
             const div = document.createElement("div")
             div.classList.add("square")
             div.setAttribute("id", (rowNumb + "" + columnNumb))
             grid.appendChild(div)
             div.addEventListener("click", () => {
-            console.warn(div.id)
 
             weHaveWinner = undefined;
-            console.log("round " + round)
             if(round % 2 === 1) {
-                newGame.markPosition("X", div.id)
+                const marker = playerOne.getMarker()
+                newGame.markPosition(marker, div.id)
                 round++
             } else {
-                newGame.markPosition("O", div.id)
+                const marker = playerTwo.getMarker()
+                newGame.markPosition(marker, div.id)
                 round++
             }
-            weHaveWinner = newGame.checkForWinner("X")
+            weHaveWinner = newGame.checkForWinner()
             
+            if(weHaveWinner) {
+                const winner = weHaveWinner === playerOne.getMarker() ? playerOne : playerTwo
+                winner.increaseScore()
+                const playerOneScore = document.getElementById("player-one-score")
+                const playertwoScore = document.getElementById("player-two-score")
+                playerOneScore.textContent = "Score: " + playerOne.getScore()
+                playertwoScore.textContent = "Score: " + playerTwo.getScore()
+                //clear gameboard
+            }
+
             if(round === 10) {
                 console.log("This is a tie")
                 weHaveWinner = "--- TIE ---"
-                //reset gameboard
+                //clear gameboard
             }
 
             })
@@ -158,11 +133,53 @@ const gridContent = (arr, newGame) => {
         rowNumb++
     }
 }
+//////////////////////////////////////////////////////////////////////////////
 
+const playGame = document.getElementById("play-game")
 playGame.addEventListener("click", () => {
     console.log("--- NEW GAME ---")
-    const newGame = Game()
-    newGame.play()
-    gridContent(gameboard, newGame)
+    
+    const newGameboard = board()
+    const newGame = Game(newGameboard.gameboard)
+    let display = render(newGameboard, newGame)
+    display.gameboardUI()
 })
 
+function render(gameboard, game) {
+    const gameboardUI = () => {
+        const grid = document.getElementById("grid")
+        const gameboardGrid = gameboard.gameboard;
+        let rowNumb = 0
+        for(const row of gameboardGrid) {
+            let columnNumb = 0
+            for(const column of gameboardGrid) {
+                const div = document.createElement("div")
+                div.classList.add("square")
+                div.setAttribute("id", (rowNumb + "" + columnNumb))
+                grid.appendChild(div)
+                div.addEventListener("click", () => {
+                    game.selectSquare(div.id)
+                })
+            }
+        }
+    }
+    const markPosition = (marker, choice) => {
+        const coordinates = choice.toString()
+        const x = coordinates[0]
+        const y = coordinates[1]
+        gameboard[x][y] = marker
+        const square = document.getElementById(choice)
+        square.textContent = marker
+        console.table(gameboard)
+    }
+    return { gameboardUI, markPosition }
+
+}
+
+
+/* gameFlow = creates players, controls rounds, checks winner (row, horiz & diag)
+        needs:
+    gameboard = checks (row, horiz & diag) winner? () = no return
+    players
+    render = grid (remove old), names, scores, positions 
+    */
