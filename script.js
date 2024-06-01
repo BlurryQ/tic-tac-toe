@@ -198,7 +198,7 @@ console.table(board)
 tester.clearBoard()
 console.table(board) */
 
-function interface() {
+const interface = (function() {
     const buildUI = (gameboard) => {
         console.log("GAMEBOARD BABY")
         const grid = document.getElementById("grid")
@@ -248,7 +248,7 @@ function interface() {
     }
     return { buildUI, displayName, editName, editMarker, displayScore, markPosition }
 
-}
+})()
 
 function newPlayer(name, marker) {
     let score = 0;
@@ -371,10 +371,7 @@ playGame.addEventListener("click", () => {
     
     const GAMEBOARD = newGameboard()
     const gameboard = GAMEBOARD.getGameboard
-    console.table(gameboard)
-/*     const INTERFACE = interface()
-    console.log(INTERFACE)
-    const interface = INTERFACE.buildUI() */
+    interface.buildUI(gameboard)
     const playerOne = newPlayer()
     const playerTwo = newPlayer()
     const GAMEFLOW = gameFlow(gameboard, interface, playerOne, playerTwo)
@@ -383,14 +380,13 @@ playGame.addEventListener("click", () => {
 })
 
 
-function tester(foo) {
+/* const mi = (function () {
     const testerooni = (foo) => {
         console.warn(foo)
     }
     return { testerooni}
-}
+})();
 
-const go = tester(foo)
-go.testerooni()
+mi.testerooni("yooooo")
 
 /* look into scope */
