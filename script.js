@@ -12,35 +12,47 @@ function newGameboard() {
 }
 
 function newInterface() {
-    let choice = ""
-    const selectSquare = (gameboard) => {
+    const playGame = document.getElementById("play-game")
+        playGame.addEventListener("click", () => {
 
+        const gameboard = newGameboard()
+        const interface = newInterface()
+        const GAMEFLOW = gameFlow(gameboard, interface,)
+        GAMEFLOW.playGame()
+
+})
+    const getName = (player) => {
+        const playerNameToFind = "player-" + player + "-name"
+        const playerName = document.getElementById(playerNameToFind).value
+        return !playerName ? "Player " + player : playerName
     }
-    const displayName = () => {
-
-    }
-    const editName = () => {
-
-    }
-    const editMarker = () => {
-
+    const getMarker = (player) => {
+        const playerMarkerToFind = "player-" + player + "-marker"
+        const playerMarker = document.getElementById(playerMarkerToFind).value
+        if(!playerMarker) { return player === "one" ? "X" : "0" } 
+        return playerMarker
     }
     const displayScores = (playerOne, playerTwo) => {
         const playerOneScoreDiv = document.getElementById("player-one-score")
         playerOneScoreDiv.textContent = "Score: " + playerOne.getScore()
         const playerTwoScoreDiv = document.getElementById("player-two-score")
         playerTwoScoreDiv.textContent = "Score: " + playerTwo.getScore()
-
+        return
     }
-    const markPosition = (marker, choice) => {
-
+    const declareWinner = (player) => {
+        const resultDisplay = document.getElementById("game-result")
+        if(player === "tie") { return resultDisplay.textContent = "This was a draw, better luck next time." }
+        return resultDisplay.textContent = "The winner is " + player + "!! Well done!!"
     }
-    return { selectSquare, displayName, editName, editMarker, displayScores, markPosition }
+    const clearResults = () => {
+        const resultDisplay = document.getElementById("game-result")
+        return resultDisplay.textContent = ""
+    }
+    return { getName, getMarker, displayScores, declareWinner, clearResults }
 
 }
 
-function newPlayer(name, marker) {
-    let score = 0;
+function newPlayer(name, marker, score) {
     const getName = () => {
         return name
     }
@@ -57,10 +69,19 @@ function newPlayer(name, marker) {
 }
 
 function gameFlow (GAMEBOARD, interface) {
-    gameboard = GAMEBOARD.getGameboard
-    const playerOne = newPlayer("playerOne", "X")
-    const playerTwo = newPlayer("playerTwo", "O")
+    const gameboard = GAMEBOARD.getGameboard,
+    one = "one", two = "two",
+    playerOneScoreDiv = document.getElementById("player-one-score").textContent,
+    playerTwoScoreDiv = document.getElementById("player-two-score").textContent,
+    playerOneScoreArr = playerOneScoreDiv.split(" "),
+    playerTwoScoreArr = playerTwoScoreDiv.split(" "),
+    playerOneScore = playerOneScoreArr[1],
+    playerTwoScore = playerTwoScoreArr[1]
+    const playerOne = newPlayer(interface.getName(one), interface.getMarker(one), playerOneScore)
+    const playerTwo = newPlayer(interface.getName(two), interface.getMarker(two), playerTwoScore)
+    interface.clearResults()
     let round = 1,
+    currentPlayer = playerOne
     alreadyWonOrTied = false
     const playGame = () => {
         const grid = document.getElementById("grid")
@@ -73,29 +94,24 @@ function gameFlow (GAMEBOARD, interface) {
         for(const row of gameboard) {
             let columnNumb = 0
             for(const column of gameboard) {
-                const div = document.createElement("div")
-                div.classList.add("square")
-                div.setAttribute("id", (rowNumb + "" + columnNumb))
-                grid.appendChild(div)
-                div.addEventListener("click", () => {
-                    currentRound = getRound()
-                    console.log("clicked " + div.id + " mothertrucker")
+                const button = document.createElement("button")
+                button.classList.add("square")
+                button.setAttribute("id", (rowNumb + "" + columnNumb))
+                grid.appendChild(button)
+                button.addEventListener("click", () => {
+                    currentRound = getRound() // might not need
                     if(alreadyWonOrTied) { return }
-                    if(round % 2 === 1) {
-                        marker = playerOne.getMarker()
-                    } else {
-                        marker = playerTwo.getMarker()
-                    }
-                    markSquare(div.id, marker)
+                    markSquare(button.id, currentPlayer.getMarker())
+                    currentPlayer = changeTurn(currentPlayer)
                     let weHaveWinner = checkForWinner()
-                    console.warn("Winning marker: " + weHaveWinner)
-
                     if(weHaveWinner === playerOne.getMarker()) { 
                         playerOne.increaseScore() 
+                        interface.declareWinner(playerOne.getName(), "Player One")
                         alreadyWonOrTied = true
                     } 
                     if(weHaveWinner === playerTwo.getMarker()) { 
                         playerTwo.increaseScore() 
+                        interface.declareWinner(playerTwo.getName(), "Player Two")
                         alreadyWonOrTied = true
                     }
 
@@ -103,8 +119,7 @@ function gameFlow (GAMEBOARD, interface) {
 
                     if(round === 10) {
                         alreadyWonOrTied = true
-                        console.log("This is a tie")
-                        weHaveWinner = "--- TIE ---"
+                        interface.declareWinner("tie")
                     } 
 
 
@@ -121,17 +136,20 @@ function gameFlow (GAMEBOARD, interface) {
         return round
     }
     const markSquare = (choice, marker) => {
-        console.log("C: " + choice)
-        console.log("M: " + marker)
         choice = choice.toString()
         const x = choice[0]
         const y = choice[1]
         gameboard[x][y] = marker
         const square = document.getElementById(choice)
+        if(!square.textContent) {
         square.textContent = marker
-        console.table(gameboard)
         increaseRound()
-        console.warn(round)
+        } else {
+            return
+        }
+    }
+    const changeTurn = (player) => {
+        return player === playerOne ? playerTwo : playerOne
     }
     const checkForWinner = () => {
         let weHaveWinner = false;
@@ -186,15 +204,6 @@ function gameFlow (GAMEBOARD, interface) {
 
 /* running code */
 
-const playGame = document.getElementById("play-game")
-playGame.addEventListener("click", () => {
-    console.log("--- NEW GAME ---")
-
-    const gameboard = newGameboard()
-    const interface = newInterface()
-    const GAMEFLOW = gameFlow(gameboard, interface,)
-    console.log(GAMEFLOW)
-    GAMEFLOW.playGame()
-})
+newInterface()
 
 
