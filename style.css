@@ -1,22 +1,154 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+button {
+    border: none;
+}
+
+/* CSS STARTS HERE */
+
 * {
     background-color: black;
     color: white;
+}
+
+:root {
+    font-family: "Roboto", system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+    --gameboard-color: #708090;
+}
+
+input {
+    border-radius: 8px;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #grid {
     display: grid;
     grid-template-rows: repeat(3, 50px);
     grid-template-columns: repeat(3, 50px);
+    justify-content: center;
 }
 
 .square {
-    border: 1px solid red;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 3rem;
 }
 
 .player-info {
     display: flex;
     gap: 1rem;
+}
+
+#player-one-marker,
+#player-two-marker,
+.square {
+    font-family: "Yarndings 20", system-ui, "Segoe UI";
+}
+
+.square:nth-child(1) {
+    border-right: 3px solid var(--gameboard-color);
+    border-bottom: 3px solid var(--gameboard-color);
+}
+
+.square:nth-child(2) {
+    border-left: 3px solid var(--gameboard-color);
+    border-right: 3px solid var(--gameboard-color);
+    border-bottom: 3px solid var(--gameboard-color);
+}
+
+.square:nth-child(3) {
+    border-left: 3px solid var(--gameboard-color);
+    border-bottom: 3px solid var(--gameboard-color);
+}
+
+.square:nth-child(4) {
+    border-top: 3px solid var(--gameboard-color);
+    border-right: 3px solid var(--gameboard-color);
+    border-bottom: 3px solid var(--gameboard-color);
+}
+
+.square:nth-child(5) {
+    border: 3px solid var(--gameboard-color);
+}
+
+.square:nth-child(6) {
+    border-top: 3px solid var(--gameboard-color);
+    border-left: 3px solid var(--gameboard-color);
+    border-bottom: 3px solid var(--gameboard-color);
+}
+
+.square:nth-child(7) {
+    border-top: 3px solid var(--gameboard-color);
+    border-right: 3px solid var(--gameboard-color);
+}
+
+.square:nth-child(8) {
+    border-top: 3px solid var(--gameboard-color);
+    border-left: 3px solid var(--gameboard-color);
+    border-right: 3px solid var(--gameboard-color);
+}
+
+.square:nth-child(9) {
+    border-top: 3px solid var(--gameboard-color);
+    border-left: 3px solid var(--gameboard-color);
+}
+
+#play-game {
+    border: 1px solid var(--gameboard-color);
+    border-radius: 8px;
 }

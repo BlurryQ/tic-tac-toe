@@ -8,28 +8,23 @@ function newGameboard() {
         }
         
     }
-    return {getGameboard, clearBoard }
+    const isGameboardFull = (gameboard) => {
+        let flatGameboard = gameboard.flat()
+        return !flatGameboard.includes("")
+    }
+    return { getGameboard, clearBoard, isGameboardFull }
 }
 
 function newInterface() {
-    const playGame = document.getElementById("play-game")
-        playGame.addEventListener("click", () => {
-
-        const gameboard = newGameboard()
-        const interface = newInterface()
-        const GAMEFLOW = gameFlow(gameboard, interface,)
-        GAMEFLOW.playGame()
-
-})
-    const getName = (player) => {
+    const getPlayerName = (player) => {
         const playerNameToFind = "player-" + player + "-name"
         const playerName = document.getElementById(playerNameToFind).value
         return !playerName ? "Player " + player : playerName
     }
-    const getMarker = (player) => {
+    const getPlayerMarker = (player) => {
         const playerMarkerToFind = "player-" + player + "-marker"
         const playerMarker = document.getElementById(playerMarkerToFind).value
-        if(!playerMarker) { return player === "one" ? "X" : "0" } 
+        if(!playerMarker) { return player === "one" ? "O" : "x" } 
         return playerMarker
     }
     const displayScores = (playerOne, playerTwo) => {
@@ -38,6 +33,20 @@ function newInterface() {
         const playerTwoScoreDiv = document.getElementById("player-two-score")
         playerTwoScoreDiv.textContent = "Score: " + playerTwo.getScore()
         return
+    }
+    const displayTurn = (currentPlayer) => {
+        const playerOneNameDiv = document.getElementById("player-one-name")
+        const playerTwoNameDiv = document.getElementById("player-two-name")
+        if(playerOneNameDiv.value === currentPlayer.getName()) {
+            playerOneNameDiv.style.cssText = "color: red"
+            playerTwoNameDiv.style.cssText = "color: white"
+
+        }
+        if(playerTwoNameDiv.value === currentPlayer.getName()) {
+            playerTwoNameDiv.style.cssText = "color: red"
+            playerOneNameDiv.style.cssText = "color: white"
+
+        }
     }
     const declareWinner = (player) => {
         const resultDisplay = document.getElementById("game-result")
@@ -48,7 +57,7 @@ function newInterface() {
         const resultDisplay = document.getElementById("game-result")
         return resultDisplay.textContent = ""
     }
-    return { getName, getMarker, displayScores, declareWinner, clearResults }
+    return { getPlayerName, getPlayerMarker, displayScores, displayTurn, declareWinner, clearResults }
 
 }
 
@@ -77,15 +86,13 @@ function gameFlow (GAMEBOARD, interface) {
     playerTwoScoreArr = playerTwoScoreDiv.split(" "),
     playerOneScore = playerOneScoreArr[1],
     playerTwoScore = playerTwoScoreArr[1]
-    const playerOne = newPlayer(interface.getName(one), interface.getMarker(one), playerOneScore)
-    const playerTwo = newPlayer(interface.getName(two), interface.getMarker(two), playerTwoScore)
+    const playerOne = newPlayer(interface.getPlayerName(one), interface.getPlayerMarker(one), playerOneScore)
+    const playerTwo = newPlayer(interface.getPlayerName(two), interface.getPlayerMarker(two), playerTwoScore)
     interface.clearResults()
-    let round = 1,
-    currentPlayer = playerOne
-    alreadyWonOrTied = false
-    const playGame = () => {
+    const playGame = (playerOneStarts) => {
+        currentPlayer = playerOneStarts ? playerOne : playerTwo
+        alreadyWonOrTied = false
         const grid = document.getElementById("grid")
-
         while(grid.firstChild) {
             grid.removeChild(grid.firstChild)
         }
@@ -99,41 +106,33 @@ function gameFlow (GAMEBOARD, interface) {
                 button.setAttribute("id", (rowNumb + "" + columnNumb))
                 grid.appendChild(button)
                 button.addEventListener("click", () => {
-                    currentRound = getRound() // might not need
                     if(alreadyWonOrTied) { return }
                     markSquare(button.id, currentPlayer.getMarker())
                     currentPlayer = changeTurn(currentPlayer)
+                    interface.displayTurn(currentPlayer)
                     let weHaveWinner = checkForWinner()
                     if(weHaveWinner === playerOne.getMarker()) { 
                         playerOne.increaseScore() 
-                        interface.declareWinner(playerOne.getName(), "Player One")
+                        interface.declareWinner(playerOne.getName())
                         alreadyWonOrTied = true
                     } 
                     if(weHaveWinner === playerTwo.getMarker()) { 
                         playerTwo.increaseScore() 
-                        interface.declareWinner(playerTwo.getName(), "Player Two")
+                        interface.declareWinner(playerTwo.getName())
                         alreadyWonOrTied = true
                     }
 
                     interface.displayScores(playerOne, playerTwo)
-
-                    if(round === 10) {
+                    if(GAMEBOARD.isGameboardFull(gameboard)) {
                         alreadyWonOrTied = true
                         interface.declareWinner("tie")
                     } 
-
 
                 })
                 columnNumb++
             }
             rowNumb++
         }
-    }
-    const increaseRound = () => {
-        round++
-    }
-    const getRound = () => {
-        return round
     }
     const markSquare = (choice, marker) => {
         choice = choice.toString()
@@ -143,7 +142,6 @@ function gameFlow (GAMEBOARD, interface) {
         const square = document.getElementById(choice)
         if(!square.textContent) {
         square.textContent = marker
-        increaseRound()
         } else {
             return
         }
@@ -201,9 +199,23 @@ function gameFlow (GAMEBOARD, interface) {
     return { playGame }
 }
 
+let playerOneStarts = true
+function loadPage() {
+
+    const playGame = document.getElementById("play-game")
+        playGame.addEventListener("click", () => {
+
+        const gameboard = newGameboard()
+        const interface = newInterface()
+        const GAMEFLOW = gameFlow(gameboard, interface,)
+        GAMEFLOW.playGame(playerOneStarts)
+        playerOneStarts = !playerOneStarts
+
+    })
+}
 
 /* running code */
 
-newInterface()
+loadPage()
 
 
