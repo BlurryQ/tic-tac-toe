@@ -19,7 +19,7 @@ function newInterface() {
     const getPlayerName = (player) => {
         const playerNameToFind = "player-" + player + "-name"
         const playerName = document.getElementById(playerNameToFind).value
-        return !playerName ? "Player " + player : playerName
+        return !playerName ? "player " + player : playerName
     }
     const getPlayerMarker = (player) => {
         const playerMarkerToFind = "player-" + player + "-marker"
@@ -37,12 +37,16 @@ function newInterface() {
     const displayTurn = (currentPlayer) => {
         const playerOneNameDiv = document.getElementById("player-one-name")
         const playerTwoNameDiv = document.getElementById("player-two-name")
-        if(playerOneNameDiv.value === currentPlayer.getName()) {
+        const playerOnePlaceholder = playerOneNameDiv.placeholder
+        const playerTwoPlaceholder = playerTwoNameDiv.placeholder
+        const playerOneValue = playerOneNameDiv.value
+        const playerTwoValue = playerTwoNameDiv.value
+        if(playerOnePlaceholder === currentPlayer.getName() || playerOneValue === currentPlayer.getName()) {
             playerOneNameDiv.style.cssText = "color: red"
             playerTwoNameDiv.style.cssText = "color: white"
 
         }
-        if(playerTwoNameDiv.value === currentPlayer.getName()) {
+        if(playerTwoPlaceholder === currentPlayer.getName() || playerTwoValue === currentPlayer.getName()) {
             playerTwoNameDiv.style.cssText = "color: red"
             playerOneNameDiv.style.cssText = "color: white"
 
@@ -89,6 +93,7 @@ function gameFlow (GAMEBOARD, interface) {
     const playerOne = newPlayer(interface.getPlayerName(one), interface.getPlayerMarker(one), playerOneScore)
     const playerTwo = newPlayer(interface.getPlayerName(two), interface.getPlayerMarker(two), playerTwoScore)
     interface.clearResults()
+
     const playGame = (playerOneStarts) => {
         currentPlayer = playerOneStarts ? playerOne : playerTwo
         alreadyWonOrTied = false
@@ -107,7 +112,8 @@ function gameFlow (GAMEBOARD, interface) {
                 grid.appendChild(button)
                 button.addEventListener("click", () => {
                     if(alreadyWonOrTied) { return }
-                    markSquare(button.id, currentPlayer.getMarker())
+                    let squareMarked = markSquare(button.id, currentPlayer.getMarker())
+                    if(!squareMarked) { return }
                     currentPlayer = changeTurn(currentPlayer)
                     interface.displayTurn(currentPlayer)
                     let weHaveWinner = checkForWinner()
@@ -142,11 +148,12 @@ function gameFlow (GAMEBOARD, interface) {
         const square = document.getElementById(choice)
         if(!square.textContent) {
         square.textContent = marker
-        } else {
-            return
+        return true
         }
+        return false
     }
     const changeTurn = (player) => {
+        console.table(gameboard)
         return player === playerOne ? playerTwo : playerOne
     }
     const checkForWinner = () => {
