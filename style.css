@@ -60,12 +60,23 @@ button {
 
 :root {
     font-family: "Roboto", system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 2rem;
 
     --gameboard-color: #708090;
 }
 
-input {
+#player-one-name,
+#player-two-name,
+#player-one-marker,
+#player-two-marker {
     border-radius: 8px;
+    font-size: 1rem;
+}
+
+#player-one-marker,
+#player-two-marker {
+    width: 1rem;
+    text-align: center;
 }
 
 .wrapper {
@@ -76,9 +87,10 @@ input {
 }
 
 #grid {
+    margin: 2rem 0px;
     display: grid;
-    grid-template-rows: repeat(3, 50px);
-    grid-template-columns: repeat(3, 50px);
+    grid-template-rows: repeat(3, 4rem);
+    grid-template-columns: repeat(3, 4rem);
     justify-content: center;
 }
 
@@ -91,7 +103,9 @@ input {
 
 .player-info {
     display: flex;
+    margin-top: 0.5rem;
     gap: 1rem;
+    align-items: center;
 }
 
 #player-one-marker,
@@ -151,4 +165,88 @@ input {
 #play-game {
     border: 1px solid var(--gameboard-color);
     border-radius: 8px;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+@media only screen and (max-width: 900px) {
+
+    .player-info {
+        margin-left: 1rem;
+        gap: 2rem;
+    }
+
+    #player-one-name,
+    #player-two-name {
+        width: 6.5rem;
+        margin-right: -1rem;
+    }
+
+    #player-one-marker,
+    #player-two-marker {
+        margin-left: 1rem;
+    }
+    
+    #player-one-score,
+    #player-two-score {
+        text-align: center;
+        margin-right: 1rem;
+    }
+
+    #grid {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    #play-game {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    #game-result {
+        font-size: 1rem;
+        text-align: center;
+    } 
+
+}
+
+@media only screen and (max-width: 570px) {
+
+    #player-one-name,
+    #player-two-name {
+        width: 5rem;
+        margin-right: -1rem;
+    }
+
+    #player-one-marker,
+    #player-two-marker {
+        margin-left: 1rem;
+    }
+
+    #player-one-score,
+    #player-two-score {
+        text-align: center;
+        margin-right: 0.5rem;
+    }
+
+    .player-info {
+        gap: 0px;
+        margin-left: 0.5rem;
+    }
+
+    #grid {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    #play-game {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    #game-result {
+        font-size: 1rem;
+        text-align: center;
+    } 
+    
 }

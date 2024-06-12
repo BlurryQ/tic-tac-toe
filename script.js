@@ -21,6 +21,11 @@ function newInterface() {
         const playerName = document.getElementById(playerNameToFind).value
         return !playerName ? "player " + player : playerName
     }
+    const setPlayerName = (player, playerName) => {
+        const playerNameToFind = "player-" + player + "-name"
+        const playerNameDiv = document.getElementById(playerNameToFind)
+        return playerNameDiv.value = capitalisedFirstLetter(playerName)
+    }
     const getPlayerMarker = (player) => {
         const playerMarkerToFind = "player-" + player + "-marker"
         const playerMarker = document.getElementById(playerMarkerToFind).value
@@ -41,12 +46,13 @@ function newInterface() {
         const playerTwoPlaceholder = playerTwoNameDiv.placeholder
         const playerOneValue = playerOneNameDiv.value
         const playerTwoValue = playerTwoNameDiv.value
-        if(playerOnePlaceholder === currentPlayer.getName() || playerOneValue === currentPlayer.getName()) {
+        const currentPlayerName = capitalisedFirstLetter(currentPlayer.getName())
+        if(playerOnePlaceholder === currentPlayerName || playerOneValue === currentPlayerName) {
             playerOneNameDiv.style.cssText = "color: red"
             playerTwoNameDiv.style.cssText = "color: white"
 
         }
-        if(playerTwoPlaceholder === currentPlayer.getName() || playerTwoValue === currentPlayer.getName()) {
+        if(playerTwoPlaceholder === currentPlayerName || playerTwoValue === currentPlayerName) {
             playerTwoNameDiv.style.cssText = "color: red"
             playerOneNameDiv.style.cssText = "color: white"
 
@@ -55,13 +61,24 @@ function newInterface() {
     const declareWinner = (player) => {
         const resultDisplay = document.getElementById("game-result")
         if(player === "tie") { return resultDisplay.textContent = "This was a draw, better luck next time." }
-        return resultDisplay.textContent = "The winner is " + player + "!! Well done!!"
+        return resultDisplay.textContent = "The winner is " + capitalisedFirstLetter(player) + "!! Well done!!"
     }
     const clearResults = () => {
         const resultDisplay = document.getElementById("game-result")
         return resultDisplay.textContent = ""
     }
-    return { getPlayerName, getPlayerMarker, displayScores, displayTurn, declareWinner, clearResults }
+    const capitalisedFirstLetter = (string) => {
+        const newName = []
+        let words = string.split(" ")
+        for(const word in words) {
+            let firstLetter = words[word][0],
+            remainder = words[word].split("").splice(1)
+            firstLetter = firstLetter.toUpperCase()
+            newName.push(firstLetter + remainder.join(""))
+        }
+        return newName.join(" ")
+    }
+    return { getPlayerName, setPlayerName, getPlayerMarker, displayScores, displayTurn, declareWinner, clearResults }
 
 }
 
@@ -92,10 +109,13 @@ function gameFlow (GAMEBOARD, interface) {
     playerTwoScore = playerTwoScoreArr[1]
     const playerOne = newPlayer(interface.getPlayerName(one), interface.getPlayerMarker(one), playerOneScore)
     const playerTwo = newPlayer(interface.getPlayerName(two), interface.getPlayerMarker(two), playerTwoScore)
+    interface.setPlayerName(one, playerOne.getName())
+    interface.setPlayerName(two, playerTwo.getName())
     interface.clearResults()
 
     const playGame = (playerOneStarts) => {
         currentPlayer = playerOneStarts ? playerOne : playerTwo
+        interface.displayTurn(currentPlayer)
         alreadyWonOrTied = false
         const grid = document.getElementById("grid")
         while(grid.firstChild) {
@@ -144,16 +164,15 @@ function gameFlow (GAMEBOARD, interface) {
         choice = choice.toString()
         const x = choice[0]
         const y = choice[1]
-        gameboard[x][y] = marker
         const square = document.getElementById(choice)
         if(!square.textContent) {
+        gameboard[x][y] = marker
         square.textContent = marker
         return true
         }
         return false
     }
     const changeTurn = (player) => {
-        console.table(gameboard)
         return player === playerOne ? playerTwo : playerOne
     }
     const checkForWinner = () => {
