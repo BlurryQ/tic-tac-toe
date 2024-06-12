@@ -62,7 +62,7 @@ button {
     font-family: "Roboto", system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 2rem;
 
-    --gameboard-color: #708090;
+    --gameboard-color: #6485a7;
 }
 
 #player-one-name,
@@ -70,6 +70,7 @@ button {
 #player-one-marker,
 #player-two-marker {
     border-radius: 8px;
+    border-color: var(--gameboard-color);
     font-size: 1rem;
 }
 
@@ -106,6 +107,18 @@ button {
     margin-top: 0.5rem;
     gap: 1rem;
     align-items: center;
+}
+
+#player-one-turn,
+#player-two-turn {
+    font-weight: bolder;
+    animation: blinker 1s infinite;
+}
+
+@keyframes blinker {
+    0% { opacity: 1;}
+    50% { opacity: 0;}
+    100% { opacity: 1;}
 }
 
 #player-one-marker,
@@ -227,6 +240,11 @@ button {
     #player-two-score {
         text-align: center;
         margin-right: 0.5rem;
+    }
+
+    #player-one-turn,
+    #player-two-turn {
+        align-self: start;
     }
 
     .player-info {

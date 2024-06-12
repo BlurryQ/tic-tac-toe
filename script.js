@@ -28,8 +28,9 @@ function newInterface() {
     }
     const getPlayerMarker = (player) => {
         const playerMarkerToFind = "player-" + player + "-marker"
-        const playerMarker = document.getElementById(playerMarkerToFind).value
+        let playerMarker = document.getElementById(playerMarkerToFind).value
         if(!playerMarker) { return player === "one" ? "O" : "x" } 
+        if(playerMarker.length > 1) { playerMarker = playerMarker[0] }
         return playerMarker
     }
     const displayScores = (playerOne, playerTwo) => {
@@ -42,20 +43,20 @@ function newInterface() {
     const displayTurn = (currentPlayer) => {
         const playerOneNameDiv = document.getElementById("player-one-name")
         const playerTwoNameDiv = document.getElementById("player-two-name")
+        const playerOneTurn = document.getElementById("player-one-turn")
+        const playerTwoTurn = document.getElementById("player-two-turn")
         const playerOnePlaceholder = playerOneNameDiv.placeholder
         const playerTwoPlaceholder = playerTwoNameDiv.placeholder
         const playerOneValue = playerOneNameDiv.value
         const playerTwoValue = playerTwoNameDiv.value
         const currentPlayerName = capitalisedFirstLetter(currentPlayer.getName())
         if(playerOnePlaceholder === currentPlayerName || playerOneValue === currentPlayerName) {
-            playerOneNameDiv.style.cssText = "color: red"
-            playerTwoNameDiv.style.cssText = "color: white"
-
+            playerOneTurn.style.cssText = "color: white;"
+            playerTwoTurn.style.cssText = "color: black;"
         }
         if(playerTwoPlaceholder === currentPlayerName || playerTwoValue === currentPlayerName) {
-            playerTwoNameDiv.style.cssText = "color: red"
-            playerOneNameDiv.style.cssText = "color: white"
-
+            playerTwoTurn.style.cssText = "color: white;"
+            playerOneTurn.style.cssText = "color: black;"
         }
     }
     const declareWinner = (player) => {
@@ -228,9 +229,14 @@ function gameFlow (GAMEBOARD, interface) {
 let playerOneStarts = true
 function loadPage() {
 
+    const playerOneTurn = document.getElementById("player-one-turn")
+    const playerTwoTurn = document.getElementById("player-two-turn")
+    playerOneTurn.style.cssText = "color: black;"
+    playerTwoTurn.style.cssText = "color: black;"
+
     const playGame = document.getElementById("play-game")
         playGame.addEventListener("click", () => {
-
+            
         const gameboard = newGameboard()
         const interface = newInterface()
         const GAMEFLOW = gameFlow(gameboard, interface,)
@@ -245,3 +251,14 @@ function loadPage() {
 loadPage()
 
 
+/* const oneMarkerLimiter = document.getElementById("player-one-marker")
+oneMarkerLimiter.addEventListener("change", () => {
+    let enteredMarker = oneMarkerLimiter.value
+    console.log("Marker: " + enteredMarker + " and is " + enteredMarker.length + " chars long")
+    if(enteredMarker.length > 1) { 
+        console.log("here")
+        let firstChar = enteredMarker[0] 
+        enteredMarker = firstChar
+    }
+    console.warn(enteredMarker)
+}) */
