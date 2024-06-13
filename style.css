@@ -51,7 +51,7 @@ button {
     border: none;
 }
 
-/* CSS STARTS HERE */
+/* ---------- CSS ---------- */
 
 * {
     background-color: black;
@@ -62,15 +62,21 @@ button {
     font-family: "Roboto", system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 2rem;
 
+    --border-thickness: 2.5px;
     --gameboard-color: #6485a7;
+    --error-color: rgb(255, 0, 0);
+    --error-color-opacity: rgba(255, 0, 0, 0.2);
+
 }
 
-#player-one-name,
-#player-two-name,
-#player-one-marker,
-#player-two-marker {
+#player-one-name:invalid,
+#player-two-name:invalid {
+    border: var(--border-thickness) solid var(--error-color);
+}
+
+.player-info input {
     border-radius: 8px;
-    border-color: var(--gameboard-color);
+    border: var(--border-thickness) solid var(--gameboard-color);
     font-size: 1rem;
 }
 
@@ -176,11 +182,17 @@ button {
 }
 
 #play-game {
-    border: 1px solid var(--gameboard-color);
+    border: var(--border-thickness) solid var(--gameboard-color);
     border-radius: 8px;
     font-size: 1.5rem;
     margin-bottom: 2rem;
 }
+
+#play-game:disabled {
+    border: var(--border-thickness) solid var(--error-color-opacity);
+}
+
+/* ---------- 900px ---------- */
 
 @media only screen and (max-width: 900px) {
 
@@ -222,6 +234,8 @@ button {
     } 
 
 }
+
+/* ---------- 570px ---------- */
 
 @media only screen and (max-width: 570px) {
 
