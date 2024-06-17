@@ -1,12 +1,11 @@
 function newGameboard() {
     const getGameboard = [["","",""],["","",""],["","",""]]
-    const clearBoard = () => {
-        for(const row in getGameboard) {
-            for(const square in getGameboard[row]) {
-                getGameboard[row][square] = ""
+    const clearBoard = (gameboard) => {
+        for(const row in gameboard) {
+            for(const square in gameboard[row]) {
+                gameboard[row][square] = ""
             }
         }
-        
     }
     const isGameboardFull = (gameboard) => {
         let flatGameboard = gameboard.flat()
@@ -154,6 +153,7 @@ function newgameFlow (GAMEBOARD, interface) {
     interface.setPlayerName(two, playerTwo.getName())
     interface.clearResults()
 
+    GAMEBOARD.clearBoard(gameboard)
     const playGame = (playerOneStarts) => {
         while(grid.firstChild) {
             grid.removeChild(grid.firstChild)
