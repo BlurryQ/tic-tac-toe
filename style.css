@@ -69,6 +69,12 @@ button {
 
 }
 
+h1 {
+    font-size: 2rem;
+    text-decoration: underline;
+    margin-top: 0.5rem;
+}
+
 #player-one-name:invalid,
 #player-two-name:invalid {
     border: var(--border-thickness) solid var(--error-color);
@@ -226,6 +232,7 @@ button {
     #play-game {
         font-size: 1rem;
         margin-bottom: 1rem;
+        margin-top: 1rem;
     }
 
     #game-result {
@@ -241,8 +248,9 @@ button {
 
     #player-one-name,
     #player-two-name {
-        width: 5rem;
+        width: 3.5rem;
         margin-right: -1rem;
+        font-size: 0.9rem;
     }
 
     #player-one-marker,
@@ -280,5 +288,10 @@ button {
         font-size: 1rem;
         text-align: center;
     } 
-    
+
+    #grid {
+        margin: 0.5rem 0px;
+        grid-template-rows: repeat(3, 3rem);
+        grid-template-columns: repeat(3, 3rem);
+    }
 }

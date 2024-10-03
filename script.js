@@ -64,7 +64,7 @@ function newInterface() {
       "background-color: var(--error-color-opacity);";
     playGame.style.cssText = "color: var(--error-color-opacity);";
     resultDisplay.textContent =
-      "Names don't match, please make them unqiue to play :)";
+      "Names match, please make them unqiue to play :)";
   };
   const _enableNewGame = () => {
     playGame.removeAttribute("disabled");
