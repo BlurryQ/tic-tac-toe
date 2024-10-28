@@ -2,6 +2,8 @@
 
 ## Summary
 
+![Tic Tac Toe Screenshot](/img/demo.png)
+
 I have created a game of tic-tac-toe for two players. Players can enter their names and choose a marker by entering letters into the inputs. Once the game has begun, players can select their positions on the grid, and the turn marker will update accordingly to show which player’s turn it is.
 
 ## Features
