@@ -6,15 +6,19 @@
 
 **Hosted:** [Tic-Tac-Toe](https://blurryq.github.io/tic-tac-toe/)
 
-I have created a game of tic-tac-toe for two players. Players can enter their names and choose a marker by entering letters into the inputs. Once the game has begun, players can select their positions on the grid, and the turn marker will update accordingly to show which player’s turn it is.
+This is a classic two-player Tic-Tac-Toe game, where players can enter their names, pick their markers by typing letters, and start playing on a responsive, real-time grid. The game UI updates automatically to show which player’s turn it is, track scores, and announce winners.
 
 ## Features
 
-- Dynamic player name and marker selection.
-- Real-time UI updates for player turns, scores, and game results.
-- Input validation to ensure player names are unique before starting.
-- Full keyboard accessibility for selecting grid positions.
-- Vanilla CSS, HTML, and JavaScript for a lightweight, responsive experience.
+- **Dynamic Player Setup**: Players choose their names and markers to start the game.
+
+- **Real-Time Updates**: Turn indicators, scores, and game results refresh instantly.
+
+- **Input Validation**: Ensures players have unique names before they can start.
+
+- **Keyboard Accessibility**: Fully playable with a keyboard for an inclusive experience.
+
+- **Lightweight Design**: Built with only HTML, CSS, and JavaScript for quick, responsive play.
 
 ## Setup
 
@@ -40,25 +44,16 @@ Alternatively, if you're using Visual Studio Code, you can install the "Live Ser
 
 ### 4. Have Fun
 
-You can now play the game or experiment with the code — just make sure to have fun! :)
+Dive in, play, and feel free to explore and modify the code to make it your own... just make sure to have fun! :)
 
 ## Challenges and Skills Demonstrated
 
-This project was built to further my knowledge of utilizing an Immediately Invoked Function Expression (IIFE) modular file system, showing encapsulation for better organization and maintainability. Using only vanilla CSS, HTML, and JavaScript, the game interacts with the DOM to respond to user input and manage the game state.
-
-### Skills Demonstrated:
-
-- **JavaScript Knowledge**: The game logic and UI are managed with modern JavaScript, utilizing ES6+. Functions are modular, reusable, and encapsulated, following best practices in structuring code.
-- **Modular Design**: The code is split into small, manageable modules for handling different aspects like the gameboard, players, and UI interface.
-- **DOM Manipulation**: The game dynamically updates the UI, responding to player actions like marking squares and updating the score or result display, showing an understanding of event-driven programming.
-- **Game Logic**: Core game development concepts such as checking for wins, managing turns, and handling ties are implemented with careful attention to detail, ensuring smooth gameplay.
-- **User Interaction Handling**: User inputs are validated in real-time, and the UI provides feedback on errors (e.g. matching player names), enhancing the overall experience.
-- **State Management**: Managing the game's state (whose turn it is, tracking the gameboard's status, and detecting game results) was a key challenge, requiring thoughtful synchronization between the UI and game logic.
+Building this project expanded my skills in JavaScript, specifically using an Immediately Invoked Function Expression (IIFE) to organize the codebase in a modular way, making it easy to maintain and extend. The game relies solely on HTML, CSS, and JavaScript, showing core skills in DOM manipulation and interactive UI handling.
 
 ### Challenges Faced:
 
-- **State Management**: Maintaining the game’s internal state, ensuring that the board, turns, and game results are correctly synchronized with the UI, especially with asynchronous events like button clicks.
-- **Validation & User Experience**: Implementing real-time validation for player names, along with providing clear error feedback via the UI, was essential for ensuring a smooth user experience.
-- **Keyboard Accessibility**: Ensuring that the game can be played fully using the keyboard required careful thought, especially for interacting with the grid and managing focus states.
+- **State Management**: Ensuring that the game’s state stayed in sync with the UI (like whose turn it is and when someone wins) was a significant challenge, especially given the asynchronous nature of user actions.
 
-This project showcases a blend of technical skills and user-focused design, providing an engaging, accessible game that’s fully functional using only a browser.
+- **Validation & User Experience**: Adding validation for player names and creating responsive error messages helped streamline the player experience.
+
+- **Keyboard Accessibility**:  Enabling keyboard-based gameplay required careful thought, especially around handling focus states for the grid.
